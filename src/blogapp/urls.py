@@ -3,6 +3,6 @@ from django.urls import path,include
 from .views import *
 
 urlpatterns = [
-    
-    path('',createAndGetAllBlogs)
+    path('/<int:id>',GetUpdateDeleteBlog.as_view()),
+    path('',CreateAndGetAllBlogs.as_view())
 ]
