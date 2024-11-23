@@ -6,7 +6,8 @@ from rest_framework.views import APIView
 from .serializers import BlogSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView,RetrieveDestroyAPIView
+from rest_framework.generics import ListCreateAPIView,RetrieveDestroyAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.filters import OrderingFilter
 
 # Create your views here.
 
@@ -59,7 +60,27 @@ from rest_framework.generics import ListCreateAPIView,RetrieveDestroyAPIView
 class CreateAndGetAllBlogs(ListCreateAPIView):
     queryset=Blog.objects.all()
     serializer_class=BlogSerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields =['title','id','update_at','create_at']
+    ordering =['id']
 
-class GetUpdateDeleteBlog(RetrieveDestroyAPIView):
+class GetUpdateDeleteBlog(RetrieveUpdateDestroyAPIView):
     queryset=Blog.objects.all()
     serializer_class=BlogSerializer
+
+    def perform_update(self,serializer):
+        blog = self.get_object()
+        old_image = blog.image
+
+        updated_blog = serializer.save()
+
+        if old_image and old_image != updated_blog.image:
+            print(f'deleting old image: {old_image.name}')
+            old_image.delete(save=False)
+        else:
+            print('no image chnage detected or no old image to delete')
+
+    def perform_destroy(self, instance):
+        if instance.image:
+            instance.image.delete(save=False)
+        instance.delete()
