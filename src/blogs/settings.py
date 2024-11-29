@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'blogapp',
     'django_filters',
     'drf_yasg',
-    'silk'
+    'silk',
+    'userapp',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -145,5 +147,11 @@ REST_FRAMEWORK ={
     'DEAFULT_FILTER_BACKENDS':[
         'django_filters.rest_framework.DjangoFilterBackend'
         'rest_framewrok.filters.OrderingFilter',
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }

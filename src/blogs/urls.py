@@ -20,15 +20,15 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('blogs/', include('blogapp.urls')),  # Ensure 'blogs/' ends with a '/'
+    path('admin/', admin.site.urls), 
+    path('blogs/', include('blogapp.urls')),
+    path('users',include('userapp.urls')),
     path('', schema_view.with_ui('swagger', cache_timeout=0)),
+    path('silk/', include('silk.urls', namespace='silk')),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0)),
 ]
 
 # Conditionally include Silk URLs if in DEBUG mode
 if settings.DEBUG:
-    urlpatterns += [
-        path('silk/', include('silk.urls', namespace='silk')),  # Correct usage with list
-    ]
+      # Correct usage with list
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
