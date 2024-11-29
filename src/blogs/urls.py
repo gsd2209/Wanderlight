@@ -21,7 +21,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
-    path('blogs/', include('blogapp.urls')),
+    path('blogs', include('blogapp.urls')),
     path('users',include('userapp.urls')),
     path('', schema_view.with_ui('swagger', cache_timeout=0)),
     path('silk/', include('silk.urls', namespace='silk')),

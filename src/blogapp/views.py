@@ -6,8 +6,9 @@ from rest_framework.views import APIView
 from .serializers import BlogSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.generics import ListCreateAPIView,RetrieveDestroyAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView,RetrieveDestroyAPIView, RetrieveUpdateDestroyAPIView,ListAPIView
 from rest_framework.filters import OrderingFilter
+from rest_framework.exceptions import PermissionDenied
 
 # Create your views here.
 
@@ -69,7 +70,9 @@ class GetUpdateDeleteBlog(RetrieveUpdateDestroyAPIView):
     serializer_class=BlogSerializer
 
     def perform_update(self,serializer):
-        blog = self.get_object()
+        blog=self.get_object()
+        if blog.creator != self.request.user:
+            raise PermissionDenied('you do not have permsision to update this blog')
         old_image = blog.image
 
         updated_blog = serializer.save()
@@ -81,6 +84,13 @@ class GetUpdateDeleteBlog(RetrieveUpdateDestroyAPIView):
             print('no image chnage detected or no old image to delete')
 
     def perform_destroy(self, instance):
+        if instance.creator != self.request.user:
+            raise PermissionDenied('you do not have permsision to delete this blog')
         if instance.image:
             instance.image.delete(save=False)
         instance.delete()
+
+class GetUserBlogs(ListAPIView):
+    serializer_class=BlogSerializer
+    def get_queryset(self):
+            return Blog.objects.filter(creator=self.request.user)
