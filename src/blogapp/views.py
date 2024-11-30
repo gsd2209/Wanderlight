@@ -59,7 +59,7 @@ from rest_framework.exceptions import PermissionDenied
 #         return Response({'message': 'Blog deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 class CreateAndGetAllBlogs(ListCreateAPIView):
-    queryset=Blog.objects.all()
+    queryset=Blog.objects.select_related('creator')
     serializer_class=BlogSerializer
     filter_backends = [OrderingFilter]
     ordering_fields =['title','id','update_at','create_at']

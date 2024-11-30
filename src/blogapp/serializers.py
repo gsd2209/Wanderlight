@@ -8,7 +8,8 @@ class BlogSerializer(serializers.ModelSerializer):
     creator= UserSerializer(read_only=True)
     class Meta:
         model=Blog
-        fields=['title','description','image','creator']
+        fields=['id','title','description','image','creator']
+        read_only_fields=['id','creator']
 
     def create(self,validate_data):
         user = self.context['request'].user

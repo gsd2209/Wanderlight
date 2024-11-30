@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+from datetime import timedelta
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env=environ.Env(DEBUG=(bool,False))
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
     'silk',
     'userapp',
     'rest_framework_simplejwt',
+    'commentapp',
 ]
 
 MIDDLEWARE = [
@@ -154,4 +158,9 @@ REST_FRAMEWORK ={
     'DEFAULT_PERMISSION_CLASSES':[
         'rest_framework.permissions.IsAuthenticated',
     ],
+}
+
+SIMPLE_JWT ={
+    'ACCESS_TOKEN_LIFETIME':timedelta(hours=12),
+    'REFRESH_TOKEN_LIFETIME':timedelta(days=7),
 }
