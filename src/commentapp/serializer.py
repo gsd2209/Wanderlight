@@ -4,14 +4,22 @@ from blogapp.serializers import UserSerializer,BlogSerializer
 from blogapp.models import Blog
 
 
+class BlogSerializer(serializers.ModelSerializer):
+    
+    creator= UserSerializer(read_only=True)
+    class Meta:
+        model=Blog
+        fields=['id','title','description','image','creator']
+        read_only_fields=['id','creator']
+
 
 class CommentSerializer(serializers.ModelSerializer):
     blog_id=serializers.IntegerField(write_only=True)
     blog_id=BlogSerializer(read_only=True)
     user = UserSerializer(read_only=True)
     class Meta:
-        model=Blog
-        fields=['id','title','description','image','creator']
+        model=Comment
+        fields=['id','text','blog_id','user','created_at','blog']
         read_only_fields=['id','created_at','user','blog']
 
     def create(self,validate_data):
