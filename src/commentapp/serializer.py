@@ -15,7 +15,7 @@ class BlogSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     blog_id=serializers.IntegerField(write_only=True)
-    blog_id=BlogSerializer(read_only=True)
+    blog=BlogSerializer(read_only=True)
     user = UserSerializer(read_only=True)
     class Meta:
         model=Comment
